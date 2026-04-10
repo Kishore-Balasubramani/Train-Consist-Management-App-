@@ -1,9 +1,10 @@
 
-package test;
 
 import org.junit.jupiter.api.Test;
+
 import java.util.*;
 import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TrainConsistManagementAppTest {
@@ -19,34 +20,7 @@ class TrainConsistManagementAppTest {
     }
 
     @Test
-    void testGrouping_BogiesGroupedByType() {
-
-        List<Bogie> bogies = Arrays.asList(
-                new Bogie("Sleeper", 72),
-                new Bogie("Sleeper", 70),
-                new Bogie("AC Chair", 56)
-        );
-
-        Map<String, List<Bogie>> grouped = bogies.stream()
-                .collect(Collectors.groupingBy(b -> b.name));
-
-        assertTrue(grouped.containsKey("Sleeper"));
-        assertEquals(2, grouped.get("Sleeper").size());
-    }
-
-    @Test
-    void testGrouping_EmptyList() {
-
-        List<Bogie> bogies = new ArrayList<>();
-
-        Map<String, List<Bogie>> grouped = bogies.stream()
-                .collect(Collectors.groupingBy(b -> b.name));
-
-        assertTrue(grouped.isEmpty());
-    }
-
-    @Test
-    void testGrouping_DifferentTypes() {
+    void testReduce_TotalSeatCalculation() {
 
         List<Bogie> bogies = Arrays.asList(
                 new Bogie("Sleeper", 72),
@@ -54,9 +28,36 @@ class TrainConsistManagementAppTest {
                 new Bogie("First Class", 24)
         );
 
-        Map<String, List<Bogie>> grouped = bogies.stream()
-                .collect(Collectors.groupingBy(b -> b.name));
+        int total = bogies.stream()
+                .map(b -> b.capacity)
+                .reduce(0, Integer::sum);
 
-        assertEquals(3, grouped.size());
+        assertEquals(152, total);
+    }
+
+    @Test
+    void testReduce_EmptyBogieList() {
+
+        List<Bogie> bogies = new ArrayList<>();
+
+        int total = bogies.stream()
+                .map(b -> b.capacity)
+                .reduce(0, Integer::sum);
+
+        assertEquals(0, total);
+    }
+
+    @Test
+    void testReduce_SingleBogieCapacity() {
+
+        List<Bogie> bogies = Arrays.asList(
+                new Bogie("Sleeper", 72)
+        );
+
+        int total = bogies.stream()
+                .map(b -> b.capacity)
+                .reduce(0, Integer::sum);
+
+        assertEquals(72, total);
     }
 }
