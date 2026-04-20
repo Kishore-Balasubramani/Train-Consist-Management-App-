@@ -27,7 +27,7 @@ public class TrainConsistManagementApp {
         bogies.add(new Bogie("First Class", 24));
         bogies.add(new Bogie("Sleeper", 70));
 
-        // 🔥 UC10 LOGIC (IMPORTANT)
+        
         int totalSeats = bogies.stream()
                 .map(b -> b.capacity)
                 .reduce(0, Integer::sum);
